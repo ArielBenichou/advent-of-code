@@ -1,4 +1,4 @@
-import { readInput } from "../../utils/load-input";
+import { readInput } from "../utils/load-input";
 
 function main() {
   const input = readInput(__dirname + "/data/input.txt");
