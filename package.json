@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ariel Benichou",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^18.11.10"
+    "@types/node": "^18.11.10",
+    "ts-node": "^10.9.1"
   }
 }
