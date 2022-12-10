@@ -1,5 +1,5 @@
 import { readInput } from "../../utils/load-input";
-import { countVisibleTrees, Grid } from "./models/tree";
+import { countVisibleTrees, findTopScenicScore, Grid } from "./models/tree";
 
 function parseInput(str: string): Grid {
   return str
@@ -19,6 +19,8 @@ function main() {
     const grid = parseInput(input);
     const visibleTreesCount = countVisibleTrees(grid);
     console.log("visible Trees", visibleTreesCount);
+    const topScore = findTopScenicScore(grid);
+    console.log("top scenic score", topScore);
 
 
     console.groupEnd();
