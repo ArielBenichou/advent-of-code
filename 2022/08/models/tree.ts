@@ -1,5 +1,6 @@
 export type Position = { x: number; y: number };
 export type Grid = number[][];
+export type Direction = 'north' | 'south' | 'west' | 'east';
 
 export function countVisibleTrees(grid: Grid): number {
   let count = 0;
@@ -32,67 +33,32 @@ function countOuterPerimeter(grid: Grid) {
 }
 
 function isTreeVisible(pos: Position, grid: Grid) {
-  const north = isTreeHiddenNorth(pos, grid);
-  const south = isTreeHiddenSouth(pos, grid);
-  const west = isTreeHiddenWest(pos, grid);
-  const east = isTreeHiddenEast(pos, grid);
+  const directions: Direction[] = ['north', 'south', 'east', 'west'];
+  const dirCounts = directions.map(dir => isTreeHidden(pos, grid, dir));
 
-  const isVisible =
-    !north.isHidden || !south.isHidden || !west.isHidden || !east.isHidden;
-  const scenicScore =
-    north.viewCount * south.viewCount * west.viewCount * east.viewCount;
+  const isVisible = dirCounts.some(dir => !dir.isHidden);
+  const scenicScore = dirCounts.reduce((acc, dir) => acc * dir.viewCount, 1)
 
   return { isVisible, scenicScore };
 }
 
-function isTreeHiddenNorth(pos: Position, grid: Grid) {
+function isTreeHidden(pos: Position, grid: Grid, direction: Direction) {
   const treeValue = grid[pos.y][pos.x];
   let viewCount = 0;
-  for (let y = pos.y - 1; y >= 0; y--) {
-    const currValue = grid[y][pos.x];
-    viewCount++;
-    if (currValue >= treeValue) {
-      return { isHidden: true, viewCount };
-    }
-  }
-  return { isHidden: false, viewCount };
-}
+  let currX = pos.x;
+  let currY = pos.y;
+  let isHidden = false;
 
-function isTreeHiddenSouth(pos: Position, grid: Grid) {
-  const treeValue = grid[pos.y][pos.x];
-  let viewCount = 0;
-  for (let y = pos.y + 1; y < grid.length; y++) {
-    const currValue = grid[y][pos.x];
+  // Continue looping until the tree is hidden or we reach the edge of the grid
+  const isOutOfBounds = (currX >= 0 && currX < grid[currY].length) && (currY >= 0 && currY < grid.length);
+  while (!isHidden && isOutOfBounds) {
+    if (direction === 'north') currY--;
+    if (direction === 'south') currY++;
+    if (direction === 'west') currX--;
+    if (direction === 'east') currX++;
     viewCount++;
-    if (currValue >= treeValue) {
-      return { isHidden: true, viewCount };
-    }
+    isHidden = grid[currY][currX] >= treeValue;
   }
-  return { isHidden: false, viewCount };
-}
 
-function isTreeHiddenWest(pos: Position, grid: Grid) {
-  const treeValue = grid[pos.y][pos.x];
-  let viewCount = 0;
-  for (let x = pos.x - 1; x >= 0; x--) {
-    const currValue = grid[pos.y][x];
-    viewCount++;
-    if (currValue >= treeValue) {
-      return { isHidden: true, viewCount };
-    }
-  }
-  return { isHidden: false, viewCount };
-}
-
-function isTreeHiddenEast(pos: Position, grid: Grid) {
-  const treeValue = grid[pos.y][pos.x];
-  let viewCount = 0;
-  for (let x = pos.x + 1; x < grid[pos.y].length; x++) {
-    const currValue = grid[pos.y][x];
-    viewCount++;
-    if (currValue >= treeValue) {
-      return { isHidden: true, viewCount };
-    }
-  }
-  return { isHidden: false, viewCount };
+  return { isHidden, viewCount };
 }
