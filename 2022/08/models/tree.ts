@@ -1,6 +1,6 @@
 export type Position = { x: number; y: number };
 export type Grid = number[][];
-export type Direction = 'north' | 'south' | 'west' | 'east';
+export type Direction = "north" | "south" | "west" | "east";
 
 export function countVisibleTrees(grid: Grid): number {
   let count = 0;
@@ -33,11 +33,11 @@ function countOuterPerimeter(grid: Grid) {
 }
 
 function isTreeVisible(pos: Position, grid: Grid) {
-  const directions: Direction[] = ['north', 'south', 'east', 'west'];
-  const dirCounts = directions.map(dir => isTreeHidden(pos, grid, dir));
+  const directions: Direction[] = ["north", "south", "east", "west"];
+  const dirCounts = directions.map((dir) => isTreeHidden(pos, grid, dir));
 
-  const isVisible = dirCounts.some(dir => !dir.isHidden);
-  const scenicScore = dirCounts.reduce((acc, dir) => acc * dir.viewCount, 1)
+  const isVisible = dirCounts.some((dir) => !dir.isHidden);
+  const scenicScore = dirCounts.reduce((acc, dir) => acc * dir.viewCount, 1);
 
   return { isVisible, scenicScore };
 }
@@ -50,12 +50,20 @@ function isTreeHidden(pos: Position, grid: Grid, direction: Direction) {
   let isHidden = false;
 
   // Continue looping until the tree is hidden or we reach the edge of the grid
-  const isOutOfBounds = (currX >= 0 && currX < grid[currY].length) && (currY >= 0 && currY < grid.length);
-  while (!isHidden && isOutOfBounds) {
-    if (direction === 'north') currY--;
-    if (direction === 'south') currY++;
-    if (direction === 'west') currX--;
-    if (direction === 'east') currX++;
+  while (!isHidden) {
+    if (direction === "north") currY--;
+    if (direction === "south") currY++;
+    if (direction === "west") currX--;
+    if (direction === "east") currX++;
+    if (
+      !(
+        currX >= 0 &&
+        currX < (grid?.[currY]?.length || 0) &&
+        currY >= 0 &&
+        currY < grid.length
+      )
+    )
+      break;
     viewCount++;
     isHidden = grid[currY][currX] >= treeValue;
   }
