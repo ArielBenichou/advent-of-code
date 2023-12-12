@@ -14,7 +14,7 @@ fn part1() {
     let mut max = 0;
     let mut current = 0;
 
-    read_to_string("../inputs/2022/01_input.txt")
+    read_to_string("../inputs/2022/01a_input.txt")
         .expect("input file should exist")
         .lines()
         .for_each(|line| {
@@ -39,7 +39,7 @@ fn part2alt() {
     let mut max = Vec::new();
     let mut current = 0;
 
-    read_to_string("../inputs/2022/01_input.txt")
+    read_to_string("../inputs/2022/01a_input.txt")
         .expect("input file should exist")
         .lines()
         .for_each(|line| {
@@ -66,7 +66,7 @@ fn part2() {
     let mut max = [0; 3];
     let mut current = 0;
 
-    read_to_string("../inputs/2022/01_input.txt")
+    read_to_string("../inputs/2022/01a_input.txt")
         .expect("input file should exist")
         .lines()
         .for_each(|line| {
