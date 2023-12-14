@@ -72,7 +72,7 @@ if (require.main === module) {
 
     const example2 = await solve("2023/01b_example.txt", secondNMap);
     assert(example2 === 281, "example input B should be 281");
-    const star2 = await solve("2023/01b_input.txt", secondNMap);
+    const star2 = await solve("2023/01a_input.txt", secondNMap);
     assert(star2 === 54581, "input A one answer should be 54581");
     console.log("second part:", star2);
   })()
