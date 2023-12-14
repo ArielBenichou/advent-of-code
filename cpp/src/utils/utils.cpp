@@ -1,10 +1,8 @@
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
 using namespace std;
-namespace fs = std::filesystem;
 
 string loadFileContent(const string &filePath) {
   string path = "../inputs/" + filePath;
@@ -12,7 +10,6 @@ string loadFileContent(const string &filePath) {
 
   if (!file.is_open()) {
     cerr << "Error: Unable to open file '" << path << "'" << endl;
-    std::cout << "Current path is " << fs::current_path() << '\n'; // (1)
     return "";
   }
 
