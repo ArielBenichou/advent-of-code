@@ -1,10 +1,5 @@
-#include "01.h"
-#include "../utils/utils.cpp"
-#include <array>
-#include <iostream>
-#include <limits>
-#include <map>
-#include <string>
+#include "main.h"
+#include "../../utils/utils.cpp"
 
 using namespace std;
 

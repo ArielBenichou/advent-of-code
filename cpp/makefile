@@ -7,7 +7,7 @@ BIN_DIR = bin
 UTILS_DIR = utils
 
 # Get all source files
-SRC_FILES = $(wildcard $(SRC_DIR)/2023/*.cpp)
+SRC_FILES = $(wildcard $(SRC_DIR)/2023/**/*.cpp)
 UTILS_FILES = $(wildcard $(UTILS_DIR)/*.cpp)
 
 # Get all entry points and corresponding executable names
