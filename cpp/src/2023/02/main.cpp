@@ -1,26 +1,52 @@
 #include "main.h"
 #include <string>
 #include <vector>
-#define PRINT_ARR(arr)                                                         \
-  for (auto e : arr)                                                           \
-    cout << e << " ";
 
-// TODO: class?
-// TODO: overload the <= operator, true if all parts are less than or equal
-struct Set {
+class Set {
+public:
   int green;
   int blue;
   int red;
+  Set(int green, int blue, int red) {
+    this->green = green;
+    this->blue = blue;
+    this->red = red;
+  }
+  void setPart(string part, int value) {
+    if (part == "green")
+      this->green = value;
+    else if (part == "blue")
+      this->blue = value;
+    else if (part == "red")
+      this->red = value;
+    else
+      throw "setPart";
+  }
+  bool operator<=(const Set &set) {
+    if (this->green > set.green)
+      return false;
+    if (this->blue > set.blue)
+      return false;
+    if (this->red > set.red)
+      return false;
+    return true;
+  }
+
+  string toString() {
+    return "(r:" + to_string(this->red) + ", g:" + to_string(this->green) +
+           ", b:" + to_string(this->blue) + ")";
+  }
 };
 
-// TODO: add to struct
-string to_string(Set set) {
-  return "(r:" + to_string(set.red) + ", g:" + to_string(set.green) +
-         ", b:" + to_string(set.blue) + ")";
+Set from(string &str) {
+  Set set = Set(0, 0, 0);
+  auto color = split(str, ",");
+  for (auto e : color) {
+    auto keyValue = split(e.substr(1), " ");
+    set.setPart(keyValue[1], stoi(keyValue[0]));
+  }
+  return set;
 }
-
-// TODO: parse the string to set
-Set from(string &str) { return {0, 0, 0}; }
 
 class Game {
 public:
@@ -35,19 +61,36 @@ public:
   string toString() {
     string res = "===\nid: " + to_string(this->id) + "\nsets:\n";
     for (auto s : this->sets) {
-      res = res + "  " + to_string(s) + "\n";
+      res = res + "  " + s.toString() + "\n";
     }
 
     return res;
   }
 
-  // TODO: return false if one of the set is bigger the the bag
-  bool isPossible(Set bag) { return true; }
+  bool isPossible(Set bag) {
+    for (auto set : this->sets) {
+      if (!(set <= bag))
+        return false;
+    }
+    return true;
+  }
 };
 
-// TODO: refactor: challangeA, challangeB, parseGames
-int main() {
-  const string filePath = "2023/02a_example.txt";
+vector<Game> parseGames(string fileContent) {
+  vector<Game> games;
+  for (auto line : split(fileContent, "\n")) {
+    auto game = split(line, ":");
+    int id = stoi(split(game[0], " ")[1]);
+    vector<Set> sets;
+    for (auto setStr : split(game[1], ";")) {
+      sets.push_back(from(setStr));
+    }
+    games.push_back(Game(id, sets));
+  }
+  return games;
+}
+
+int challengeA(const string filePath) {
   const string fileContent = loadFileContent(filePath);
   const Set bag = {12, 13, 14};
 
@@ -55,32 +98,25 @@ int main() {
     throw "file " + filePath + " is empty!";
   }
 
-  vector<Game> games;
-
-  for (auto line : split(fileContent, "\n")) {
-    auto game = split(line, ":");
-    int id = stoi(split(game[0], " ")[1]);
-    vector<Set> sets;
-    for (auto setStr : split(game[1], ";")) {
-      cout << "'" << setStr << "'" << endl;
-      sets.push_back(from(setStr));
-    }
-
-    games.push_back(Game(id, sets));
-  }
+  auto games = parseGames(fileContent);
 
   int sumId = 0;
   for (auto game : games) {
-    cout << game.toString() << endl;
     if (game.isPossible(bag)) {
       sumId += game.id;
     }
   }
 
-  cout << "01 a example: (should be 8)" << endl;
-  cout << "Sum: " << sumId << endl;
+  return sumId;
+}
 
-  /* cout << "01 a input: (should be 2593)" << endl; */
-  /* cout << "Sum: " << sumId << endl; */
+int main() {
+  cout << "01 a example: (should be 8)" << endl;
+  int exampleA = challengeA("2023/02a_example.txt");
+  cout << "Sum: " << exampleA << endl;
+
+  cout << "01 a input: (should be 2593)" << endl;
+  int inputA = challengeA("2023/02a_input.txt");
+  cout << "Sum: " << inputA << endl;
   return 0;
 }
