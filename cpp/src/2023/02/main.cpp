@@ -31,6 +31,7 @@ public:
       return false;
     return true;
   }
+  int power() { return this->green * this->blue * this->red; }
 
   string toString() {
     return "(r:" + to_string(this->red) + ", g:" + to_string(this->green) +
@@ -74,6 +75,19 @@ public:
     }
     return true;
   }
+
+  Set minmum() {
+    Set minSet = Set(0, 0, 0);
+    for (Set s : this->sets) {
+      if (s.red > minSet.red)
+        minSet.red = s.red;
+      if (s.green > minSet.green)
+        minSet.green = s.green;
+      if (s.blue > minSet.blue)
+        minSet.blue = s.blue;
+    }
+    return minSet;
+  }
 };
 
 vector<Game> parseGames(string fileContent) {
@@ -110,6 +124,22 @@ int challengeA(const string filePath) {
   return sumId;
 }
 
+int challengeB(const string filePath) {
+  const string fileContent = loadFileContent(filePath);
+
+  if (fileContent.empty()) {
+    throw "file " + filePath + " is empty!";
+  }
+
+  auto games = parseGames(fileContent);
+
+  int sumPower = 0;
+  for (auto game : games) {
+    sumPower += game.minmum().power();
+  }
+  return sumPower;
+}
+
 int main() {
   cout << "01 a example: (should be 8)" << endl;
   int exampleA = challengeA("2023/02a_example.txt");
@@ -118,5 +148,13 @@ int main() {
   cout << "01 a input: (should be 2593)" << endl;
   int inputA = challengeA("2023/02a_input.txt");
   cout << "Sum: " << inputA << endl;
+
+  cout << "01 a example: (should be 2286)" << endl;
+  int exampleB = challengeB("2023/02a_example.txt");
+  cout << "Sum: " << exampleB << endl;
+
+  cout << "01 a input: (should be 54699)" << endl;
+  int inputB = challengeB("2023/02a_input.txt");
+  cout << "Sum: " << inputB << endl;
   return 0;
 }
