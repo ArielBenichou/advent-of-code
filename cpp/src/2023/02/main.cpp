@@ -7,7 +7,7 @@ public:
   int green;
   int blue;
   int red;
-  Set(int green, int blue, int red) {
+  Set(int red, int green, int blue) {
     this->green = green;
     this->blue = blue;
     this->red = red;
@@ -92,7 +92,7 @@ vector<Game> parseGames(string fileContent) {
 
 int challengeA(const string filePath) {
   const string fileContent = loadFileContent(filePath);
-  const Set bag = {12, 13, 14};
+  const Set bag = Set(12, 13, 14);
 
   if (fileContent.empty()) {
     throw "file " + filePath + " is empty!";
