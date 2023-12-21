@@ -1,8 +1,4 @@
-#pragma once
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <vector>
+#include "utils.h"
 
 using namespace std;
 

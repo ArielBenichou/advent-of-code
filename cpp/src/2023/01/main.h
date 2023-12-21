@@ -1,5 +1,5 @@
 #pragma once
-#include "../../utils/utils.cpp"
+#include "../../utils/utils.h"
 #include <array>
 #include <iostream>
 #include <map>
