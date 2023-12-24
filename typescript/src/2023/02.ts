@@ -57,7 +57,7 @@ if (require.main === module) {
     });
     assert(example1 === 8, `example input A should be 8, got ${example1}`);
     let star1 = 0;
-    await solve("2023/02a_input.txt", (id, sets) => {
+    await solve("2023/02_input.txt", (id, sets) => {
       if (isSolvable(sets, compareSet)) {
         star1 += id;
       }
@@ -73,7 +73,7 @@ if (require.main === module) {
     });
     assert(example2 === 2286, `example input B should be 2286, got ${example2}`);
     let star2 = 0;
-    await solve("2023/02a_input.txt", (_, game) => {
+    await solve("2023/02_input.txt", (_, game) => {
       const set = findMinimumSet(game);
       star2 += powerSet(set);
     });

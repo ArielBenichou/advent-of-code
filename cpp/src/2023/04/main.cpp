@@ -75,7 +75,7 @@ int main() {
   int exampleB = challengeB("2023/04b_example.txt");
   cout << "Sum: " << exampleB << endl;
 
-  cout << "04 B Input: (should be NOT 16379 - TOO_LOW)" << endl;
+  cout << "04 B Input: (should be 5095824)" << endl;
   int inputB = challengeB("2023/04_input.txt");
   cout << "Sum: " << inputB << endl;
 

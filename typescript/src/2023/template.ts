@@ -13,7 +13,7 @@ if (require.main === module) {
   (async () => {
     const example1 = await solve("2023/02a_example.txt");
     assert(example1 === 8, "example input A should be 8");
-    // const star1 = await solve("2023/01a_input.txt", firstNMap);
+    // const star1 = await solve("2023/01_input.txt", firstNMap);
     // assert(star1 === 54927, "input A one answer should be 54927");
     // console.log("first part:", star1);
     //
