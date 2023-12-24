@@ -4,7 +4,6 @@
 #include <sstream>
 #include <vector>
 
-using namespace std;
-
-string loadFileContent(const string &filePath);
-vector<string> split(string s, string delimiter);
+std::string loadFileContent(const std::string &filePath);
+std::vector<std::string> split(std::string s, std::string delimiter);
+std::string trim(std::string s);
