@@ -11,19 +11,19 @@ map<string, int> TERMS{{"0", 0},   {"1", 1},     {"2", 2},     {"3", 3},
 int main() {
   const array<const string, 10> domain{"0", "1", "2", "3", "4",
                                        "5", "6", "7", "8", "9"};
-  cout << "01 a example: (should be 142)" << endl;
+  cout << "01 A Example: (should be 142)" << endl;
   challenge<10>("2023/01a_example.txt", domain);
-  cout << "01 a input: (should be 54927)" << endl;
+  cout << "01 A Input: (should be 54927)" << endl;
   challenge<10>("2023/01a_input.txt", domain);
-  cout << "01 b example: (should be 281)" << endl;
 
+  cout << "01 B Example: (should be 281)" << endl;
   const array<const string, 20> domain2{
       "0",    "1",    "2",   "3",     "4",     "5",    "6",
       "7",    "8",    "9",   "zero",  "one",   "two",  "three",
       "four", "five", "six", "seven", "eight", "nine",
   };
   challenge<20>("2023/01b_example.txt", domain2);
-  cout << "01 b input: (should be 54581)" << endl;
+  cout << "01 B Input: (should be 54581)" << endl;
   challenge<20>("2023/01a_input.txt", domain2);
   return 0;
 }

@@ -39,19 +39,19 @@ int challengeB(const string filePath) {
 }
 
 int main() {
-  cout << "01 a example: (should be 8)" << endl;
+  cout << "02 A Example: (should be 8)" << endl;
   int exampleA = challengeA("2023/02a_example.txt");
   cout << "Sum: " << exampleA << endl;
 
-  cout << "01 a input: (should be 2593)" << endl;
+  cout << "02 A Input: (should be 2593)" << endl;
   int inputA = challengeA("2023/02a_input.txt");
   cout << "Sum: " << inputA << endl;
 
-  cout << "01 a example: (should be 2286)" << endl;
+  cout << "02 B Example: (should be 2286)" << endl;
   int exampleB = challengeB("2023/02a_example.txt");
   cout << "Sum: " << exampleB << endl;
 
-  cout << "01 a input: (should be 54699)" << endl;
+  cout << "02 B Input: (should be 54699)" << endl;
   int inputB = challengeB("2023/02a_input.txt");
   cout << "Sum: " << inputB << endl;
   return 0;
