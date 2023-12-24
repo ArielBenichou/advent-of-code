@@ -16,23 +16,23 @@ vector<int> parseNumbers(vector<string> strs) {
   return numbers;
 }
 
-Card parseCard(string str) {
+Card parseCard(string str, int idx) {
   auto parts = split(str, ":");
-  auto id = stoi(parts[0].substr(parts[0].find_last_not_of(' ')));
   auto cardParts = split(parts[1], "|");
   auto winningNumbers = parseNumbers(split(trim(cardParts[0]), " "));
   auto numbers = parseNumbers(split(trim(cardParts[1]), " "));
 
-  return Card(id, winningNumbers, numbers);
+  return Card(idx + 1, winningNumbers, numbers);
 }
 
 int challengeA(const string &filePath) {
   auto content = loadFileContent(filePath);
   auto lines = split(content, "\n");
   int sumPoints = 0;
-  for (auto line : lines) {
-    Card card = parseCard(line);
+  for (int i = 0; auto line : lines) {
+    Card card = parseCard(line, i);
     sumPoints += card.value();
+    i++;
   }
   return sumPoints;
 }
@@ -42,14 +42,15 @@ int challengeB(const string &filePath) {
   auto lines = split(content, "\n");
   vector<Card> cards;
   deque<int> queue;
-  for (auto line : lines) {
-    Card c = parseCard(line);
+  for (int i = 0; auto line : lines) {
+    Card c = parseCard(line, i);
     cards.push_back(c);
     queue.push_back(c.getId());
+    i++;
   }
 
   int sumCards = 0;
-  while (queue.size() > 0) {
+  while (queue.size()) {
     int id = queue.front();
     queue.pop_front();
     sumCards++;
