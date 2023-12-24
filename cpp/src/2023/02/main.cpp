@@ -44,7 +44,7 @@ int main() {
   cout << "Sum: " << exampleA << endl;
 
   cout << "02 A Input: (should be 2593)" << endl;
-  int inputA = challengeA("2023/02a_input.txt");
+  int inputA = challengeA("2023/02_input.txt");
   cout << "Sum: " << inputA << endl;
 
   cout << "02 B Example: (should be 2286)" << endl;
@@ -52,7 +52,7 @@ int main() {
   cout << "Sum: " << exampleB << endl;
 
   cout << "02 B Input: (should be 54699)" << endl;
-  int inputB = challengeB("2023/02a_input.txt");
+  int inputB = challengeB("2023/02_input.txt");
   cout << "Sum: " << inputB << endl;
   return 0;
 }

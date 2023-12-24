@@ -14,7 +14,7 @@ int main() {
   cout << "01 A Example: (should be 142)" << endl;
   challenge<10>("2023/01a_example.txt", domain);
   cout << "01 A Input: (should be 54927)" << endl;
-  challenge<10>("2023/01a_input.txt", domain);
+  challenge<10>("2023/01_input.txt", domain);
 
   cout << "01 B Example: (should be 281)" << endl;
   const array<const string, 20> domain2{
@@ -24,7 +24,7 @@ int main() {
   };
   challenge<20>("2023/01b_example.txt", domain2);
   cout << "01 B Input: (should be 54581)" << endl;
-  challenge<20>("2023/01a_input.txt", domain2);
+  challenge<20>("2023/01_input.txt", domain2);
   return 0;
 }
 
