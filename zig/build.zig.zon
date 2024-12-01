@@ -7,6 +7,6 @@
         "build.zig",
         "build.zig.zon",
         "src",
-        "../inputs",
+        "inputs",
     },
 }
