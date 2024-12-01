@@ -82,21 +82,21 @@ long long challenge(const std::string &filePath, ParseMode mode) {
 int main() {
   std::cout << "05 A Example: (should be 35)" << std::endl;
   long long exampleA =
-      challenge("../inputs/2023/05a_example.txt", ParseMode::SEEDS);
+      challenge("../../../inputs/2023/05a_example.txt", ParseMode::SEEDS);
   std::cout << "Sum: " << exampleA << std::endl;
 
   std::cout << "05 A Input: (should be 331445006)" << std::endl;
-  long long inputA = challenge("../inputs/2023/05_input.txt", ParseMode::SEEDS);
+  long long inputA = challenge("../../../inputs/2023/05_input.txt", ParseMode::SEEDS);
   std::cout << "Sum: " << inputA << std::endl;
 
   std::cout << "05 B Example: (should be 46)" << std::endl;
   long long exampleB =
-      challenge("../inputs/2023/05a_example.txt", ParseMode::SEEDS_RANGE);
+      challenge("../../../inputs/2023/05a_example.txt", ParseMode::SEEDS_RANGE);
   std::cout << "Sum: " << exampleB << std::endl;
 
   std::cout << "05 B Input: (should be ?)" << std::endl;
   long long inputB =
-      challenge("../inputs/2023/05_input.txt", ParseMode::SEEDS_RANGE);
+      challenge("../../../inputs/2023/05_input.txt", ParseMode::SEEDS_RANGE);
   std::cout << "Sum: " << inputB << std::endl;
   return 0;
 }

@@ -1,52 +1,87 @@
 const std = @import("std");
 
-// fn getMinDistanceSum(path: []const u8) !i32 {
-//     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-//     const allocator = gpa.allocator();
-//
-//     var file = try std.fs.cwd().openFile(path, .{});
-//     defer file.close();
-//     var buf_reader = std.io.bufferedReader(file.reader());
-//     var in_stream = buf_reader.reader();
-//     var buf: [1024]u8 = undefined;
-//
-//     const list1 = std.ArrayList(i32).init(allocator);
-//     const list2 = std.ArrayList(i32).init(allocator);
-//     while (try in_stream.readUntilDelimiterOrEof(&buf, '\n')) |line| {
-//         const pair = extractPair(&line);
-//         list1.append(pair[0]);
-//         list2.append(pair[1]);
-//     }
-//
-//     std.debug.print("{}\n{}\n", .{ list1, list2 });
-//
-//     var sum: i32 = 0;
-//     sum += 1;
-//
-//     return sum;
-// }
+fn part1(path: []const u8) !u64 {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    const allocator = gpa.allocator();
+    const content = try readFile(allocator, path);
+    const lists = try getSortedLists(allocator, content);
 
-fn extractPair(line: *const [7:0]u8) ![2]i32 {
-    var pair = [2]i32{ undefined, undefined };
-    var i: usize = 0;
-    var start: usize = 0;
-    var end: usize = 0;
-    for (0..line.len) |ch| {
-        end += 1;
-        if (line[ch] == ' ') {
-            pair[i] = try std.fmt.parseInt(i32, line[start..end], 10);
-            i += 1;
-            start = end;
-        }
+    return getMinDistanceSum(lists[0], lists[1]);
+}
+
+fn part2(path: []const u8) !u64 {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    const allocator = gpa.allocator();
+    const content = try readFile(allocator, path);
+    const lists = try getSortedLists(allocator, content);
+
+    return getSimilarityScore(lists[0], lists[1]);
+}
+
+fn getSortedLists(allocator: std.mem.Allocator, content: []u8) ![2]std.ArrayList(u64) {
+    var lines = std.mem.tokenizeSequence(u8, content, "\r\n");
+
+    var list_left = std.ArrayList(u64).init(allocator);
+    var list_right = std.ArrayList(u64).init(allocator);
+    while (lines.next()) |line| {
+        var parts = std.mem.tokenizeScalar(u8, line, ' ');
+        try list_left.append(try std.fmt.parseInt(u64, parts.next().?, 10));
+        try list_right.append(try std.fmt.parseInt(u64, parts.next().?, 10));
     }
-    return pair;
+
+    std.sort.pdq(u64, list_left.items, {}, std.sort.asc(u64));
+    std.sort.pdq(u64, list_right.items, {}, std.sort.asc(u64));
+
+    return .{ list_left, list_right };
 }
 
-test "extractPair" {
-    try std.testing.expectEqual(try extractPair("12   98"), .{ 12, 98 });
+fn readFile(allocator: std.mem.Allocator, path: []const u8) ![]u8 {
+    var file = try std.fs.cwd().openFile(path, .{});
+    defer file.close();
+    const content = try file.readToEndAlloc(allocator, 100 * 1024);
+    return content;
 }
 
-// test "day 1 - part 1 - example" {
-//     const path = "../inputs/2024/01a_example.txt";
-//     try std.testing.expectEqual(try getMinDistanceSum(path), 11);
-// }
+fn getMinDistanceSum(list_left: std.ArrayList(u64), list_right: std.ArrayList(u64)) u64 {
+    var sum: u64 = 0;
+    for (list_left.items, list_right.items) |l, r| {
+        sum += if (l > r) (l - r) else (r - l);
+    }
+    return sum;
+}
+
+fn getSimilarityScore(list_left: std.ArrayList(u64), list_right: std.ArrayList(u64)) u64 {
+    var sum: u64 = 0;
+    for (list_left.items) |l| {
+        var occur: usize = 0;
+        for (list_right.items) |r| {
+            if (l == r) {
+                occur += 1;
+            } else if (occur > 0) {
+                break;
+            }
+        }
+        sum += occur * l;
+    }
+    return sum;
+}
+
+test "day 1 - part 1 - example" {
+    const path = "../inputs/2024/01_example.txt";
+    try std.testing.expectEqual(11, try part1(path));
+}
+
+test "day 1 - part 1" {
+    const path = "../inputs/2024/01_input.txt";
+    try std.testing.expectEqual(2756096, try part1(path));
+}
+
+test "day 1 - part 2 - example" {
+    const path = "../inputs/2024/01_example.txt";
+    try std.testing.expectEqual(31, try part2(path));
+}
+
+test "day 1 - part 2" {
+    const path = "../inputs/2024/01_input.txt";
+    try std.testing.expectEqual(23117829, try part2(path));
+}
