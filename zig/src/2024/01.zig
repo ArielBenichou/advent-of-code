@@ -19,6 +19,7 @@ fn part2(path: []const u8) !u64 {
 }
 
 fn getSortedLists(allocator: std.mem.Allocator, content: []u8) ![2]std.ArrayList(u64) {
+    // TODO: fix /r/n to use for windows only
     var lines = std.mem.tokenizeSequence(u8, content, "\r\n");
 
     var list_left = std.ArrayList(u64).init(allocator);
