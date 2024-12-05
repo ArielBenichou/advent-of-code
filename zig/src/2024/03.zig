@@ -1,11 +1,11 @@
 const std = @import("std");
 const utils = @import("./utils.zig");
 
-fn solution1(path: []const u8) !u64 {
+fn solution(path: []const u8, parse_do_dont: bool) !u64 {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
     const allocator = arena.allocator();
-    var parser = Parser.init();
+    var parser = Parser.init(parse_do_dont);
     var lines = try utils.LineReader.init(allocator, path);
     defer lines.deinit();
     while (lines.next()) |line| {
@@ -17,12 +17,14 @@ fn solution1(path: []const u8) !u64 {
 
 const Parser = struct {
     const Self = @This();
-
     sum: u64,
+    skip: bool = false,
+    parse_do_dont: bool,
 
-    fn init() Self {
+    fn init(parse_do_dont: bool) Self {
         return Self{
             .sum = 0,
+            .parse_do_dont = parse_do_dont,
         };
     }
 
@@ -33,6 +35,29 @@ const Parser = struct {
         var it = Tokenizer.init(line);
         var last: Tokenizer.Token = .Invalid;
         while (true) {
+            if (self.parse_do_dont) {
+                switch (last) {
+                    .do => {
+                        last = it.next() orelse break;
+                        if (last != .ParanLeft) continue;
+                        last = it.next() orelse break;
+                        if (last != .ParanRight) continue;
+                        self.skip = false;
+                    },
+                    .@"don't" => {
+                        last = it.next() orelse break;
+                        if (last != .ParanLeft) continue;
+                        last = it.next() orelse break;
+                        if (last != .ParanRight) continue;
+                        self.skip = true;
+                    },
+                    else => {},
+                }
+            }
+            if (self.skip) {
+                last = it.next() orelse break;
+                continue;
+            }
             if (last != .mul) {
                 last = it.next() orelse break;
                 continue;
@@ -88,21 +113,48 @@ const Tokenizer = struct {
         if (self.cursor == self.buffer.len) return null;
         switch (self.buffer[self.cursor]) {
             'm' => {
-                if (std.mem.eql(
-                    u8,
-                    self.buffer[self.cursor .. self.cursor + @tagName(Token.mul).len],
-                    @tagName(Token.mul),
-                )) {
-                    self.cursor += @tagName(Token.mul).len;
-                    return .mul;
+                {
+                    const token: Token = Token.mul;
+                    if (std.mem.eql(
+                        u8,
+                        self.buffer[self.cursor .. self.cursor + @tagName(token).len],
+                        @tagName(token),
+                    )) {
+                        self.cursor += @tagName(token).len;
+                        return token;
+                    }
                 }
                 self.cursor += 1;
                 return .Invalid;
             },
-            // 'd' => {
-            //     self.cursor += 1;
-            //     return .do;
-            // },
+            'd' => {
+                {
+                    const token: Token = Token.@"don't";
+                    if (std.mem.eql(
+                        u8,
+                        self.buffer[self.cursor .. self.cursor + @tagName(token).len],
+                        @tagName(token),
+                    )) {
+                        self.cursor += @tagName(token).len;
+                        return token;
+                    }
+                }
+
+                {
+                    const token: Token = Token.do;
+                    if (std.mem.eql(
+                        u8,
+                        self.buffer[self.cursor .. self.cursor + @tagName(token).len],
+                        @tagName(token),
+                    )) {
+                        self.cursor += @tagName(token).len;
+                        return token;
+                    }
+                }
+
+                self.cursor += 1;
+                return .Invalid;
+            },
             '(' => {
                 self.cursor += 1;
                 return .ParanLeft;
@@ -138,21 +190,21 @@ const Tokenizer = struct {
 };
 
 test "day 3 - part 1 - example" {
-    const path = "../inputs/2024/03_example.txt";
-    try std.testing.expectEqual(161, try solution1(path));
+    const path = "../inputs/2024/03a_example.txt";
+    try std.testing.expectEqual(161, try solution(path, false));
 }
 
 test "day 3 - part 1" {
     const path = "../inputs/2024/03_input.txt";
-    try std.testing.expectEqual(163931492, try solution1(path));
+    try std.testing.expectEqual(163931492, try solution(path, false));
 }
 
-// test "day 3 - part 2 - example" {
-//     const path = "../inputs/2024/03_example.txt";
-//     try std.testing.expectEqual(4, try solution(path));
-// }
+test "day 3 - part 2 - example" {
+    const path = "../inputs/2024/03b_example.txt";
+    try std.testing.expectEqual(48, try solution(path, true));
+}
 
-// test "day 3 - part 2" {
-//     const path = "../inputs/2024/03_input.txt";
-//     try std.testing.expectEqual(0, try solution(path));
-// }
+test "day 3 - part 2" {
+    const path = "../inputs/2024/03_input.txt";
+    try std.testing.expectEqual(76911921, try solution(path, true));
+}
